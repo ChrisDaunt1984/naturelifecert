@@ -3,5 +3,28 @@
         {
             "path": "."
         }
-    ]
+    ],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+
+    {
+        "name": "Python: Flask",
+        "type": "python",
+        "request": "launch",
+        "module": "flask",
+        "env": {
+            "PYTHONPATH": "${workspaceFolder}",
+            "FLASK_APP": "naturelifecert",
+            "FLASK_DEBUG": "0",
+        },
+        "args": [
+            "run",
+            //,
+            //"--no-debugger"
+        ],
+        "jinja": true,
+        "justMyCode": true
+    },
+]
 }

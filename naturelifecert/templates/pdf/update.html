@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="first_name">Title</label>
+    <input name="first_name" id="first_name"
+      value="{{ request.form['first_name'] or post['first_name'] }}" required>
+    <input name="last_name" id="last_name"
+      value="{{ request.form['last_name'] or post['last_name'] }}" required>
+    <input name="country" id="country"
+      value="{{ request.form['country'] or post['country'] }}" required>
+    <input name="donation" id="donation"
+      value="{{ request.form['donation'] or post['donation'] }}" required>
+    <input name="currency" id="currency"
+      value="{{ request.form['currency'] or post['currency'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('pdf.delete', id=post['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
