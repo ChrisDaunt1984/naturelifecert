@@ -9,3 +9,8 @@ def test_config():
 def test_hello(client):
     response = client.get('/hello')
     assert response.data == b'Hello, World!'
+
+if __name__ == '__main__':
+    import pytest
+    import sys
+    pytest.main(sys.argv)
