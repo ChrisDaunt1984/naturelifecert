@@ -26,6 +26,35 @@ def register():
 
     return render_template("auth/register.html")
 
+@click.command("create-user")
+@click.argument("username")
+@click.password_option()
+def create_user_command(username, password):
+    """Create a new user."""
+    with current_app.app_context():
+        db = get_db()
+        error = None
+
+        if not username:
+            error = "Username is required."
+        elif not password:
+            error = "Password is required."
+
+        if error is None:
+            try:
+                db.execute(
+                    "INSERT INTO user (username, password) VALUES (?, ?)",
+                    (username, generate_password_hash(password)),
+                )
+                db.commit()
+            except db.IntegrityError:
+                error = f"User {username} is already registered."
+
+        if error:
+            click.echo(error)
+        else:
+            click.echo(f"Created user {username}")
+
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -80,31 +109,4 @@ def logout():
 def init_app(app):
     app.cli.add_command(create_user_command)
 
-@click.command("create-user")
-@click.argument("username")
-@click.password_option()
-def create_user_command(username, password):
-    """Create a new user."""
-    with current_app.app_context():
-        db = get_db()
-        error = None
 
-        if not username:
-            error = "Username is required."
-        elif not password:
-            error = "Password is required."
-
-        if error is None:
-            try:
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"User {username} is already registered."
-
-        if error:
-            click.echo(error)
-        else:
-            click.echo(f"Created user {username}")
