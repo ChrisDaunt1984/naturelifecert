@@ -17,6 +17,8 @@ build/
 .idea/
 docs/_build/
 .vscode
+.sqlite
+.pdf
 
 # Coverage reports
 htmlcov/
