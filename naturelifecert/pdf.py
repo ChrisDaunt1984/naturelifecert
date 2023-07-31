@@ -6,6 +6,7 @@ from naturelifecert.db import get_db
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import pathlib
 import io
 
 bp = Blueprint("pdf", __name__)
@@ -106,7 +107,8 @@ def generate_pdf():
     pdf_buffer = generate_pdf_from_data(first_name, last_name, country, donation, currency)
 
     # Save the PDF to a temporary file
-    pdf_file_path = f'/tmp/form_data.pdf'
+    cwd = pathlib.Path(__file__).parent
+    pdf_file_path =  cwd / f'naturelifecert_{first_name}_{last_name}.pdf'
     with open(pdf_file_path, 'wb') as pdf_file:
         pdf_file.write(pdf_buffer)
 
@@ -149,12 +151,11 @@ def generate_pdf_from_data(first_name, last_name, country, donation, currency):
 def handle_download_and_redirect(response):
     # Check if the response has a pdf_file_path attribute
     if hasattr(response, 'pdf_file_path'):
+        # Get the file path of the generated PDF from the response variable
         pdf_file_path = response.pdf_file_path
 
         # Send the file as a response to initiate the download
         response = send_file(pdf_file_path, as_attachment=True)
 
         # Redirect back to the index page after the PDF is downloaded
-        return response, redirect(url_for('index'))
-
     return response

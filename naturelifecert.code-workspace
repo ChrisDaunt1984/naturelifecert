@@ -16,7 +16,7 @@
         "env": {
             "PYTHONPATH": "${workspaceFolder}",
             "FLASK_APP": "naturelifecert",
-            "FLASK_DEBUG": "0",
+            "FLASK_DEBUG": "1",
         },
         "args": [
             "run",
