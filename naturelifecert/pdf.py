@@ -90,9 +90,6 @@ def get_post(id, check_author=True):
     return post
 
 
-
-
-
 # Your route to generate the PDF
 @bp.route("/generate_pdf", methods=["GET"])
 def generate_pdf():
@@ -108,18 +105,19 @@ def generate_pdf():
 
     # Save the PDF to a temporary file
     cwd = pathlib.Path(__file__).parent
-    pdf_file_path =  cwd / f'naturelifecert_{first_name}_{last_name}.pdf'
-    with open(pdf_file_path, 'wb') as pdf_file:
+    pdf_file_path = cwd / f"naturelifecert_{first_name}_{last_name}.pdf"
+    with open(pdf_file_path, "wb") as pdf_file:
         pdf_file.write(pdf_buffer)
 
     # Set the PDF file path as a response variable to access it in the after_request function
-    response = make_response(redirect(url_for('index')))
+    response = make_response(redirect(url_for("index")))
     response.pdf_file_path = pdf_file_path
 
     return response
 
+
 # Your route to initiate the PDF download
-@bp.route('/download_pdf', methods=['GET'])
+@bp.route("/download_pdf", methods=["GET"])
 def download_pdf():
     # Get the file path of the generated PDF from the response variable
     pdf_file_path = request.response.pdf_file_path
@@ -147,15 +145,19 @@ def generate_pdf_from_data(first_name, last_name, country, donation, currency):
     buffer.seek(0)
     return buffer.getvalue()
 
+
 @bp.after_request
 def handle_download_and_redirect(response):
     # Check if the response has a pdf_file_path attribute
-    if hasattr(response, 'pdf_file_path'):
+    if hasattr(response, "pdf_file_path"):
         # Get the file path of the generated PDF from the response variable
         pdf_file_path = response.pdf_file_path
 
         # Send the file as a response to initiate the download
         response = send_file(pdf_file_path, as_attachment=True)
+
+        #delete theh file
+        pathlib.Path(response.pdf_file_path).unlink()
 
         # Redirect back to the index page after the PDF is downloaded
     return response

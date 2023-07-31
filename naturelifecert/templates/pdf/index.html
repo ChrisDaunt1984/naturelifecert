@@ -15,9 +15,6 @@
           <h1>{{ post['first_name'] }} {{ post['last_name'] }} {{ post['country'] }}</h1>
           <div class="about">by {{ post['currency'] }} {{ post['donation'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
         </div>
-        {% if g.user['id'] == post['author_id'] %}
-          <a class="action" href="{{ url_for('pdf.update', id=post['id']) }}">Edit</a>
-        {% endif %}
       </header>
       <p class="body">{{ post['body'] }}</p>
     </article>

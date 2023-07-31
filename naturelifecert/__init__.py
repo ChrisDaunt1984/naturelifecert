@@ -34,6 +34,7 @@ def create_app(test_config=None):
 
     from . import auth
     app.register_blueprint(auth.bp)
+    auth.init_app(app)
 
     from . import pdf
     app.register_blueprint(pdf.bp)
