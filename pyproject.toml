@@ -4,6 +4,7 @@ version = "0.0.1"
 description = "The certificate generating application for naturelife"
 dependencies = [
     "flask",
+    "reportlab",
 ]
 
 [build-system]
