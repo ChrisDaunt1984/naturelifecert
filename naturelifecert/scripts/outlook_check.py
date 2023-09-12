@@ -68,7 +68,9 @@ class EmailParser:
         Returns:
             dict: A dictionary containing the extracted information.
         """
-        return None
+        #write some function to extact the info
+        return {'FirstName': first_name,
+                'LastName': last_name,}
 
 
 def send_mail(username: str, password: str, email_address: str, path_to_pdf: str) -> None:
@@ -159,9 +161,9 @@ def extract_info_from_email(imap, mail) -> dict:
 
             # decode the email subject and sender
             subject = decode_header(msg["Subject"])[0][0]
-            if isinstance(subject, bytes):
-                # if it's a bytes type, decode to str
-                subject = subject.decode()
+            # if isinstance(subject, bytes):
+            #     # if it's a bytes type, decode to str
+            #     subject = subject.decode()
             sender = decode_header(msg["From"])[0][0]
             if isinstance(sender, bytes):
                 # if it's a bytes type, decode to str
@@ -172,7 +174,7 @@ def extract_info_from_email(imap, mail) -> dict:
             text_content = extract_text_from_email_payload(payload)
 
             # extract information from the email using the EmailParser class
-            info = EmailParser(sender=sender, subject=subject, text=text_content).extract_info()
+            info = EmailParser(sender=sender, subject=subject, text=text_content)
 
             return info
 
@@ -203,9 +205,9 @@ def outlook_check(username: str, password: str) -> None:
         imap.select("inbox")
 
         # filter for emails with the subject line containing 'Welcome'
-        filter_search_string = 'Welcome'
+        filter_search_string = 'Donation from'
         filter_on = f'SUBJECT "{filter_search_string}"'
-        unseen_only = True #ONLY SET TO FALSE FOR DEBUGGING, OTHERWISE YOU WILL SPAM!
+        unseen_only = False #ONLY SET TO FALSE FOR DEBUGGING, OTHERWISE YOU WILL SPAM!
         status_string = 'UNSEEN' if unseen_only else 'All'
 
         # perform the search
